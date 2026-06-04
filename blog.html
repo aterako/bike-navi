@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>バイクコラム｜Bike-Navi</title>
+  <meta name="description" content="バイク初心者から上級者まで役立つ情報を発信。免許・選び方・保険・用品・ツーリングまで徹底解説。">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; color: #333; background: #f5f5f5; }
+    nav { background: #1a1a2e; padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+    .logo { color: #e94560; font-size: 24px; font-weight: 800; text-decoration: none; }
+    .nav-links a { color: #ccc; text-decoration: none; margin-left: 28px; font-size: 15px; }
+    .nav-links a:hover { color: #e94560; }
+    .page-header { background: linear-gradient(135deg, #1a1a2e, #0f3460); color: white; padding: 60px 40px; text-align: center; }
+    .page-header h1 { font-size: 36px; font-weight: 800; margin-bottom: 12px; }
+    .page-header p { color: #aaa; font-size: 16px; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px 60px; }
+    .articles-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .article-card { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.06); transition: transform 0.2s; text-decoration: none; color: inherit; display: block; }
+    .article-card:hover { transform: translateY(-4px); }
+    .article-thumb { background: linear-gradient(135deg, #1a1a2e, #0f3460); height: 160px; display: flex; align-items: center; justify-content: center; font-size: 64px; }
+    .article-body { padding: 20px; }
+    .article-cat { background: #e94560; color: white; font-size: 11px; padding: 3px 10px; border-radius: 20px; display: inline-block; margin-bottom: 10px; }
+    .article-title { font-size: 17px; font-weight: 700; margin-bottom: 8px; line-height: 1.5; color: #1a1a2e; }
+    .article-desc { font-size: 13px; color: #666; line-height: 1.6; margin-bottom: 12px; }
+    .article-meta { font-size: 12px; color: #aaa; }
+    footer { background: #1a1a2e; color: #888; text-align: center; padding: 30px 40px; font-size: 14px; }
+    footer a { color: #aaa; text-decoration: none; margin: 0 12px; }
+    @media (max-width: 680px) { .articles-grid { grid-template-columns: 1fr; } .nav-links { display: none; } }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="logo">🏍️ Bike-Navi</a>
+    <div class="nav-links">
+      <a href="shindan.html">AIバイク診断</a>
+      <a href="hoken.html">保険比較</a>
+      <a href="youhin.html">おすすめ用品</a>
+      <a href="blog.html" style="color:#e94560;">コラム</a>
+    </div>
+  </nav>
+  <div class="page-header">
+    <h1>📝 バイクコラム</h1>
+    <p>初心者から上級者まで役立つバイク情報を発信</p>
+  </div>
+  <div class="container">
+    <div class="articles-grid">
+      <a href="article01.html" class="article-card">
+        <div class="article-thumb">🏍️</div>
+        <div class="article-body">
+          <span class="article-cat">初心者ガイド</span>
+          <div class="article-title">バイク初心者ガイド：免許の種類から選び方まで完全解説</div>
+          <div class="article-desc">これからバイクを始めたい方へ。免許の種類・取得方法・おすすめ車種まで一から丁寧に解説します。</div>
+          <div class="article-meta">2026.06.04</div>
+        </div>
+      </a>
+      <a href="article02.html" class="article-card">
+        <div class="article-thumb">🌱</div>
+        <div class="article-body">
+          <span class="article-cat">車種選び</span>
+          <div class="article-title">初心者におすすめのバイク10選【予算別・用途別】</div>
+          <div class="article-desc">バイクを初めて買う方に向けて、予算・用途・免許別におすすめ車種を厳選してご紹介。</div>
+          <div class="article-meta">2026.06.04</div>
+        </div>
+      </a>
+      <a href="article03.html" class="article-card">
+        <div class="article-thumb">🛡️</div>
+        <div class="article-body">
+          <span class="article-cat">保険</span>
+          <div class="article-title">バイク保険の選び方と比較【2026年最新版】</div>
+          <div class="article-desc">任意保険は絶対必要？補償内容の見方から安くする方法まで、バイク保険の全てを解説。</div>
+          <div class="article-meta">2026.06.04</div>
+        </div>
+      </a>
+      <a href="article04.html" class="article-card">
+        <div class="article-thumb">⚙️</div>
+        <div class="article-body">
+          <span class="article-cat">用品</span>
+          <div class="article-title">バイクを買う前に揃えるべき用品リスト【優先順位付き】</div>
+          <div class="article-desc">ヘルメット・ジャケット・グローブ…何から揃えればいい？安全に乗るための必須アイテムを解説。</div>
+          <div class="article-meta">2026.06.04</div>
+        </div>
+      </a>
+      <a href="article05.html" class="article-card">
+        <div class="article-thumb">💰</div>
+        <div class="article-body">
+          <span class="article-cat">費用・維持費</span>
+          <div class="article-title">バイクの維持費はいくらかかる？年間コストを徹底解説</div>
+          <div class="article-desc">税金・保険・ガソリン・消耗品…バイクにかかるリアルな維持費を排気量別に徹底解説。</div>
+          <div class="article-meta">2026.06.04</div>
+        </div>
+      </a>
+      <a href="article06.html" class="article-card">
+        <div class="article-thumb">🗻</div>
+        <div class="article-body">
+          <span class="article-cat">ツーリング</span>
+          <div class="article-title">ツーリング初心者向けガイド：準備から楽しみ方まで</div>
+          <div class="article-desc">初めてのツーリングで失敗しないために。持ち物・ルート・注意点を徹底ガイドします。</div>
+          <div class="article-meta">2026.06.04</div>
+        </div>
+      </a>
+      <a href="article07.html" class="article-card">
+        <div class="article-thumb">⚡</div>
+        <div class="article-body">
+          <span class="article-cat">車種選び</span>
+          <div class="article-title">250ccバイクおすすめ10選【2026年版・初心者向け】</div>
+          <div class="article-desc">維持費が安く扱いやすい250cc。人気車種から隠れた名車まで、用途別に厳選してご紹介。</div>
+          <div class="article-meta">2026.06.04</div>
+        </div>
+      </a>
+      <a href="article08.html" class="article-card">
+        <div class="article-thumb">🏪</div>
+        <div class="article-body">
+          <span class="article-cat">購入ガイド</span>
+          <div class="article-title">バイク購入の流れと手順を解説【新車・中古車】</div>
+          <div class="article-desc">バイクを買うときに何をすればいい？バイク屋選びから納車までの流れをわかりやすく解説。</div>
+          <div class="article-meta">2026.06.04</div>
+        </div>
+      </a>
+      <a href="article09.html" class="article-card">
+        <div class="article-thumb">🪖</div>
+        <div class="article-body">
+          <span class="article-cat">用品</span>
+          <div class="article-title">ヘルメットの選び方【初心者向け完全ガイド2026年版】</div>
+          <div class="article-desc">フルフェイス・ジェット・システム…どれを選べばいい？予算別・用途別にヘルメットを徹底解説。</div>
+          <div class="article-meta">2026.06.04</div>
+        </div>
+      </a>
+      <a href="article10.html" class="article-card">
+        <div class="article-thumb">🔒</div>
+        <div class="article-body">
+          <span class="article-cat">防犯</span>
+          <div class="article-title">バイクの盗難対策と防犯グッズ完全ガイド</div>
+          <div class="article-desc">バイク盗難は年間約2万件。効果的な防犯対策とおすすめグッズを紹介。被害に遭わないために。</div>
+          <div class="article-meta">2026.06.04</div>
+        </div>
+      </a>
+    </div>
+  </div>
+  <footer>
+    <p><a href="index.html">ホーム</a><a href="shindan.html">AIバイク診断</a><a href="hoken.html">保険比較</a><a href="youhin.html">おすすめ用品</a><a href="blog.html">コラム</a></p>
+    <p style="margin-top:12px;">© 2026 Bike-Navi. All rights reserved.</p>
+  </footer>
+</body>
+</html>
