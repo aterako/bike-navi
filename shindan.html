@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIバイク診断｜Bike-Navi</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; color: #333; background: #f5f5f5; }
+
+    nav {
+      background: #1a1a2e;
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo { color: #e94560; font-size: 24px; font-weight: 800; text-decoration: none; }
+    .nav-links a {
+      color: #ccc;
+      text-decoration: none;
+      margin-left: 28px;
+      font-size: 15px;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #e94560; }
+
+    .page-header {
+      background: linear-gradient(135deg, #1a1a2e, #0f3460);
+      color: white;
+      padding: 60px 40px;
+      text-align: center;
+    }
+    .page-header h1 { font-size: 36px; font-weight: 800; margin-bottom: 12px; }
+    .page-header p { color: #aaa; font-size: 16px; }
+
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 0 20px 60px;
+    }
+
+    .form-card {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+
+    .form-group { margin-bottom: 28px; }
+    .form-group label {
+      display: block;
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 10px;
+      color: #1a1a2e;
+    }
+    .form-group label span { color: #e94560; font-size: 12px; margin-left: 6px; }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .option-btn {
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 14px 16px;
+      cursor: pointer;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s;
+      background: white;
+      color: #555;
+    }
+    .option-btn:hover { border-color: #e94560; color: #e94560; }
+    .option-btn.selected {
+      border-color: #e94560;
+      background: #e94560;
+      color: white;
+    }
+    .option-btn .icon { display: block; font-size: 24px; margin-bottom: 4px; }
+
+    .options-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: #e94560;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 18px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-top: 10px;
+    }
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(233,69,96,0.4);
+    }
+    .submit-btn:disabled { background: #ccc; transform: none; box-shadow: none; cursor: not-allowed; }
+
+    /* 結果エリア */
+    #result {
+      display: none;
+      margin-top: 30px;
+      background: #1a1a2e;
+      color: white;
+      border-radius: 20px;
+      padding: 36px;
+    }
+    #result h2 { font-size: 22px; margin-bottom: 16px; color: #e94560; }
+    #result-text { line-height: 1.8; font-size: 15px; white-space: pre-wrap; }
+
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #aaa;
+      font-size: 16px;
+    }
+    .loading .dots::after {
+      content: '';
+      animation: dots 1.5s infinite;
+    }
+    @keyframes dots {
+      0% { content: ''; }
+      33% { content: '.'; }
+      66% { content: '..'; }
+      100% { content: '...'; }
+    }
+
+    /* APIキー入力エリア */
+    .api-notice {
+      background: #fff8e1;
+      border: 1px solid #ffd54f;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      font-size: 14px;
+      color: #555;
+    }
+    .api-notice a { color: #e94560; }
+    #api-key-input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 2px solid #ffd54f;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-top: 8px;
+      font-family: monospace;
+    }
+
+    footer {
+      background: #1a1a2e;
+      color: #888;
+      text-align: center;
+      padding: 30px 40px;
+      font-size: 14px;
+    }
+    footer a { color: #aaa; text-decoration: none; margin: 0 12px; }
+
+    @media (max-width: 600px) {
+      .options-grid { grid-template-columns: 1fr 1fr; }
+      .form-card { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="logo">🏍️ Bike-Navi</a>
+    <div class="nav-links">
+      <a href="shindan.html">AIバイク診断</a>
+      <a href="hoken.html">保険比較</a>
+      <a href="youhin.html">おすすめ用品</a>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <h1>🔍 AIバイク診断</h1>
+    <p>いくつかの質問に答えるだけで、あなたにぴったりのバイクをご提案します</p>
+  </div>
+
+  <div class="container">
+    <div class="form-card">
+
+      <div class="api-notice">
+        ⚠️ この診断にはClaude APIキーが必要です。<br>
+        <a href="https://console.anthropic.com/" target="_blank">Anthropic Console</a> で取得できます（無料枠あり）。
+        <input type="password" id="api-key-input" placeholder="sk-ant-api...">
+      </div>
+
+      <!-- 予算 -->
+      <div class="form-group">
+        <label>💰 予算はどのくらいですか？ <span>必須</span></label>
+        <div class="options-grid-3">
+          <button class="option-btn" onclick="select(this,'budget')">
+            <span class="icon">🌱</span>〜30万円
+          </button>
+          <button class="option-btn" onclick="select(this,'budget')">
+            <span class="icon">💡</span>30〜70万円
+          </button>
+          <button class="option-btn" onclick="select(this,'budget')">
+            <span class="icon">⭐</span>70〜100万円
+          </button>
+          <button class="option-btn" onclick="select(this,'budget')">
+            <span class="icon">🔥</span>100〜150万円
+          </button>
+          <button class="option-btn" onclick="select(this,'budget')">
+            <span class="icon">👑</span>150万円以上
+          </button>
+          <button class="option-btn" onclick="select(this,'budget')">
+            <span class="icon">🤔</span>まだ決めてない
+          </button>
+        </div>
+      </div>
+
+      <!-- 用途 -->
+      <div class="form-group">
+        <label>🗺️ 主な用途は？ <span>必須</span></label>
+        <div class="options-grid">
+          <button class="option-btn" onclick="select(this,'usage')">
+            <span class="icon">🏙️</span>通勤・街乗り
+          </button>
+          <button class="option-btn" onclick="select(this,'usage')">
+            <span class="icon">🗻</span>ツーリング
+          </button>
+          <button class="option-btn" onclick="select(this,'usage')">
+            <span class="icon">🏁</span>スポーツ走行
+          </button>
+          <button class="option-btn" onclick="select(this,'usage')">
+            <span class="icon">🌲</span>オフロード
+          </button>
+        </div>
+      </div>
+
+      <!-- 経験 -->
+      <div class="form-group">
+        <label>🎓 ライダー経験は？ <span>必須</span></label>
+        <div class="options-grid">
+          <button class="option-btn" onclick="select(this,'exp')">
+            <span class="icon">🌱</span>これから始める
+          </button>
+          <button class="option-btn" onclick="select(this,'exp')">
+            <span class="icon">🚗</span>原付は乗ったことある
+          </button>
+          <button class="option-btn" onclick="select(this,'exp')">
+            <span class="icon">🏍️</span>中型免許あり
+          </button>
+          <button class="option-btn" onclick="select(this,'exp')">
+            <span class="icon">🔥</span>大型免許あり
+          </button>
+        </div>
+      </div>
+
+      <!-- 好みのスタイル -->
+      <div class="form-group">
+        <label>🎨 好みのスタイルは？</label>
+        <div class="options-grid">
+          <button class="option-btn" onclick="select(this,'style')">
+            <span class="icon">⚡</span>かっこいい・スポーティ
+          </button>
+          <button class="option-btn" onclick="select(this,'style')">
+            <span class="icon">😊</span>かわいい・おしゃれ
+          </button>
+          <button class="option-btn" onclick="select(this,'style')">
+            <span class="icon">🔧</span>実用的・シンプル
+          </button>
+          <button class="option-btn" onclick="select(this,'style')">
+            <span class="icon">🦅</span>クラシック・レトロ
+          </button>
+        </div>
+      </div>
+
+      <button class="submit-btn" id="submit-btn" onclick="diagnose()">
+        🤖 AIに診断してもらう
+      </button>
+
+      <!-- 結果 -->
+      <div id="result">
+        <h2>🏍️ AIからの診断結果</h2>
+        <div id="result-text"></div>
+        <a href="youhin.html" style="display:block;margin-top:24px;background:#e94560;color:white;text-align:center;padding:14px;border-radius:10px;text-decoration:none;font-weight:700;">⚙️ バイクに必要な用品もチェックする →</a>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    <p>
+      <a href="index.html">ホーム</a>
+      <a href="shindan.html">AIバイク診断</a>
+      <a href="hoken.html">保険比較</a>
+      <a href="youhin.html">おすすめ用品</a>
+    </p>
+    <p style="margin-top:12px;">© 2026 Bike-Navi. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const selections = { budget: null, usage: null, exp: null, style: null };
+
+    function select(btn, group) {
+      document.querySelectorAll(`[onclick="select(this,'${group}')"]`).forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selections[group] = btn.innerText.trim();
+    }
+
+    async function diagnose() {
+      const apiKey = document.getElementById('api-key-input').value.trim();
+      if (!apiKey) { alert('APIキーを入力してください'); return; }
+      if (!selections.budget) { alert('予算を選択してください'); return; }
+      if (!selections.usage) { alert('用途を選択してください'); return; }
+      if (!selections.exp) { alert('経験を選択してください'); return; }
+
+      const budget = selections.budget;
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      btn.textContent = '診断中...';
+
+      const resultDiv = document.getElementById('result');
+      const resultText = document.getElementById('result-text');
+      resultDiv.style.display = 'block';
+      resultText.innerHTML = '<div class="loading">AIが分析しています<span class="dots"></span></div>';
+
+      const prompt = `あなたはバイクの専門家です。以下の条件に合うバイクを日本語で提案してください。
+
+【条件】
+- 予算: ${budget}
+- 用途: ${selections.usage}
+- 経験: ${selections.exp}
+- 好みのスタイル: ${selections.style || '特になし'}
+
+【回答形式】
+1. おすすめバイク（3車種）をそれぞれ以下の形式で：
+   ▶ 車種名（メーカー）
+   価格帯：
+   特徴：（2〜3文）
+   おすすめポイント：
+
+2. 最後に購入時のアドバイスを1〜2文で。
+
+丁寧でわかりやすい日本語でお願いします。`;
+
+      try {
+        const response = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': apiKey,
+            'anthropic-version': '2023-06-01',
+            'anthropic-dangerous-direct-browser-access': 'true'
+          },
+          body: JSON.stringify({
+            model: 'claude-haiku-4-5-20251001',
+            max_tokens: 1024,
+            messages: [{ role: 'user', content: prompt }]
+          })
+        });
+
+        if (!response.ok) {
+          const err = await response.json();
+          throw new Error(err.error?.message || 'APIエラーが発生しました');
+        }
+
+        const data = await response.json();
+        resultText.textContent = data.content[0].text;
+      } catch (e) {
+        resultText.textContent = 'エラー: ' + e.message;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '🤖 AIに診断してもらう';
+      }
+    }
+
+    updateBudget(3);
+  </script>
+
+</body>
+</html>

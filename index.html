@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bike-Navi｜AIがあなたにぴったりのバイクを診断</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; color: #333; }
+
+    /* ナビ */
+    nav {
+      background: #1a1a2e;
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo { color: #e94560; font-size: 24px; font-weight: 800; text-decoration: none; }
+    .nav-links a {
+      color: #ccc;
+      text-decoration: none;
+      margin-left: 28px;
+      font-size: 15px;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #e94560; }
+
+    /* ヒーロー */
+    .hero {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      color: white;
+      padding: 100px 40px;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 800;
+      line-height: 1.3;
+      margin-bottom: 20px;
+    }
+    .hero h1 span { color: #e94560; }
+    .hero p {
+      font-size: 18px;
+      color: #aaa;
+      margin-bottom: 40px;
+      line-height: 1.7;
+    }
+    .btn-primary {
+      background: #e94560;
+      color: white;
+      padding: 16px 40px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 700;
+      display: inline-block;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(233,69,96,0.4);
+    }
+
+    /* 特徴セクション */
+    .features {
+      padding: 80px 40px;
+      background: #f9f9f9;
+      text-align: center;
+    }
+    .section-title {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .section-sub {
+      color: #888;
+      font-size: 16px;
+      margin-bottom: 50px;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .feature-card {
+      background: white;
+      border-radius: 16px;
+      padding: 36px 24px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      transition: transform 0.2s;
+    }
+    .feature-card:hover { transform: translateY(-4px); }
+    .feature-icon { font-size: 48px; margin-bottom: 16px; }
+    .feature-card h3 { font-size: 18px; margin-bottom: 10px; }
+    .feature-card p { color: #666; font-size: 14px; line-height: 1.7; }
+
+    /* 診断CTAセクション */
+    .cta-section {
+      background: linear-gradient(135deg, #e94560, #c0392b);
+      color: white;
+      padding: 80px 40px;
+      text-align: center;
+    }
+    .cta-section h2 { font-size: 36px; font-weight: 800; margin-bottom: 16px; }
+    .cta-section p { font-size: 18px; margin-bottom: 36px; opacity: 0.9; }
+    .btn-white {
+      background: white;
+      color: #e94560;
+      padding: 16px 40px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 700;
+      display: inline-block;
+      transition: transform 0.2s;
+    }
+    .btn-white:hover { transform: translateY(-2px); }
+
+    /* 人気バイクカテゴリ */
+    .categories {
+      padding: 80px 40px;
+      text-align: center;
+    }
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .cat-card {
+      background: #1a1a2e;
+      color: white;
+      border-radius: 12px;
+      padding: 28px 16px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .cat-card:hover { background: #e94560; }
+    .cat-card .cat-icon { font-size: 36px; margin-bottom: 10px; }
+    .cat-card p { font-size: 14px; color: #aaa; margin-top: 6px; }
+    .cat-card:hover p { color: #ffcdd2; }
+
+    /* 用品バナー */
+    .youhin-banner {
+      padding: 60px 40px;
+      background: #fff;
+      text-align: center;
+    }
+    .youhin-banner-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      background: linear-gradient(135deg, #1a1a2e, #0f3460);
+      border-radius: 24px;
+      padding: 50px 40px;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+    }
+    .youhin-banner-text { text-align: left; }
+    .youhin-banner-text h2 { font-size: 26px; font-weight: 800; margin-bottom: 10px; }
+    .youhin-banner-text p { color: #aaa; font-size: 15px; line-height: 1.6; }
+    .youhin-items { display: flex; gap: 16px; font-size: 40px; flex-shrink: 0; }
+    .btn-youhin {
+      background: #e94560;
+      color: white;
+      padding: 14px 32px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 700;
+      white-space: nowrap;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .btn-youhin:hover { transform: translateY(-2px); }
+    @media (max-width: 768px) {
+      .youhin-banner-inner { flex-direction: column; text-align: center; }
+      .youhin-banner-text { text-align: center; }
+      .youhin-items { justify-content: center; }
+    }
+
+    /* フッター */
+    footer {
+      background: #1a1a2e;
+      color: #888;
+      text-align: center;
+      padding: 30px 40px;
+      font-size: 14px;
+    }
+    footer a { color: #aaa; text-decoration: none; margin: 0 12px; }
+    footer a:hover { color: white; }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 30px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .cat-grid { grid-template-columns: repeat(2, 1fr); }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ナビ -->
+  <nav>
+    <a href="index.html" class="logo">🏍️ Bike-Navi</a>
+    <div class="nav-links">
+      <a href="shindan.html">AIバイク診断</a>
+      <a href="hoken.html">保険比較</a>
+      <a href="youhin.html">おすすめ用品</a>
+    </div>
+  </nav>
+
+  <!-- ヒーロー -->
+  <section class="hero">
+    <h1>あなたにぴったりのバイクを<br><span>AIが無料で診断します</span></h1>
+    <p>予算・用途・経験を入力するだけ。<br>数百車種から最適な一台をご提案します。</p>
+    <a href="shindan.html" class="btn-primary">🔍 無料で診断する（60秒）</a>
+  </section>
+
+  <!-- 特徴 -->
+  <section class="features">
+    <h2 class="section-title">選ばれる3つの理由</h2>
+    <p class="section-sub">Bike-Naviが多くのライダーに使われている理由</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <h3>AIが最適な一台を提案</h3>
+        <p>最新AIが予算・用途・経験レベルを分析し、あなただけのバイク選びをサポートします。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3>保険・ローン情報も充実</h3>
+        <p>バイク購入後に必要な保険の比較や、お得なローン情報もまとめて確認できます。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚙️</div>
+        <h3>国内全メーカー対応</h3>
+        <p>Honda・Yamaha・Suzuki・Kawasaki・その他輸入車まで、幅広くカバーしています。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- カテゴリ -->
+  <section class="categories">
+    <h2 class="section-title">バイクカテゴリから探す</h2>
+    <p class="section-sub">乗りたいスタイルから選んでみよう</p>
+    <div class="cat-grid">
+      <a href="shindan.html" class="cat-card">
+        <div class="cat-icon">🏙️</div>
+        <strong>原付・スクーター</strong>
+        <p>通勤・街乗りに最適</p>
+      </a>
+      <a href="shindan.html" class="cat-card">
+        <div class="cat-icon">🛣️</div>
+        <strong>ネイキッド</strong>
+        <p>オールラウンドに活躍</p>
+      </a>
+      <a href="shindan.html" class="cat-card">
+        <div class="cat-icon">🏁</div>
+        <strong>スポーツ・SS</strong>
+        <p>スピードを楽しみたい方に</p>
+      </a>
+      <a href="shindan.html" class="cat-card">
+        <div class="cat-icon">🗻</div>
+        <strong>ツーリング</strong>
+        <p>長距離旅行に最適</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- 用品バナー -->
+  <section class="youhin-banner">
+    <div class="youhin-banner-inner">
+      <div class="youhin-items">🪖🧥🧤</div>
+      <div class="youhin-banner-text">
+        <h2>バイクを買ったら用品も揃えよう</h2>
+        <p>ヘルメット・ジャケット・グローブ…<br>安全に乗るための必須アイテムを厳選紹介。</p>
+      </div>
+      <a href="youhin.html" class="btn-youhin">おすすめ用品を見る →</a>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <h2>まずは無料診断から始めよう</h2>
+    <p>質問に答えるだけで、あなたにぴったりのバイクがわかります。</p>
+    <a href="shindan.html" class="btn-white">今すぐ診断する →</a>
+  </section>
+
+  <!-- フッター -->
+  <footer>
+    <p>
+      <a href="index.html">ホーム</a>
+      <a href="shindan.html">AIバイク診断</a>
+      <a href="hoken.html">保険比較</a>
+      <a href="youhin.html">おすすめ用品</a>
+    </p>
+    <p style="margin-top:12px;">© 2026 Bike-Navi. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

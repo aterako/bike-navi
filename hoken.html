@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>バイク保険比較｜Bike-Navi</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; color: #333; background: #f5f5f5; }
+
+    nav {
+      background: #1a1a2e;
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo { color: #e94560; font-size: 24px; font-weight: 800; text-decoration: none; }
+    .nav-links a { color: #ccc; text-decoration: none; margin-left: 28px; font-size: 15px; }
+    .nav-links a:hover { color: #e94560; }
+
+    .page-header {
+      background: linear-gradient(135deg, #1a1a2e, #0f3460);
+      color: white;
+      padding: 60px 40px;
+      text-align: center;
+    }
+    .page-header h1 { font-size: 36px; font-weight: 800; margin-bottom: 12px; }
+    .page-header p { color: #aaa; font-size: 16px; }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 40px 20px 60px; }
+
+    .section-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: #1a1a2e;
+    }
+    .section-sub { color: #888; font-size: 14px; margin-bottom: 24px; }
+
+    /* 比較表 */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      margin-bottom: 40px;
+    }
+    .compare-table th {
+      background: #1a1a2e;
+      color: white;
+      padding: 16px;
+      text-align: center;
+      font-size: 14px;
+    }
+    .compare-table th:first-child { text-align: left; padding-left: 24px; }
+    .compare-table td {
+      padding: 16px;
+      text-align: center;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 14px;
+    }
+    .compare-table td:first-child { text-align: left; padding-left: 24px; font-weight: 600; }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table tr:hover td { background: #fef8f9; }
+    .badge {
+      background: #e94560;
+      color: white;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-left: 6px;
+    }
+    .check { color: #2ecc71; font-size: 18px; }
+    .cross { color: #ccc; font-size: 18px; }
+
+    /* 保険カード */
+    .insurance-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+    .insurance-card {
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      border: 2px solid transparent;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .insurance-card:hover { border-color: #e94560; transform: translateY(-2px); }
+    .insurance-card.recommended { border-color: #e94560; }
+    .rec-badge {
+      background: #e94560;
+      color: white;
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+    .insurance-name { font-size: 20px; font-weight: 800; margin-bottom: 8px; color: #1a1a2e; }
+    .insurance-price { font-size: 28px; font-weight: 800; color: #e94560; margin-bottom: 4px; }
+    .insurance-price span { font-size: 14px; color: #888; font-weight: 400; }
+    .insurance-features { list-style: none; margin: 16px 0; }
+    .insurance-features li { padding: 6px 0; font-size: 14px; color: #555; border-bottom: 1px solid #f5f5f5; }
+    .insurance-features li::before { content: '✓ '; color: #2ecc71; font-weight: 700; }
+    .affiliate-btn {
+      display: block;
+      background: #e94560;
+      color: white;
+      text-align: center;
+      padding: 12px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 15px;
+      margin-top: 16px;
+      transition: opacity 0.2s;
+    }
+    .affiliate-btn:hover { opacity: 0.85; }
+    .affiliate-btn.outline {
+      background: white;
+      border: 2px solid #e94560;
+      color: #e94560;
+    }
+
+    /* 説明コンテンツ */
+    .info-card {
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      margin-bottom: 30px;
+    }
+    .info-card h3 { font-size: 20px; font-weight: 800; margin-bottom: 16px; color: #1a1a2e; }
+    .info-card p { font-size: 15px; line-height: 1.8; color: #555; margin-bottom: 12px; }
+    .info-card p:last-child { margin-bottom: 0; }
+
+    footer {
+      background: #1a1a2e;
+      color: #888;
+      text-align: center;
+      padding: 30px 40px;
+      font-size: 14px;
+    }
+    footer a { color: #aaa; text-decoration: none; margin: 0 12px; }
+
+    @media (max-width: 680px) {
+      .insurance-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="logo">🏍️ Bike-Navi</a>
+    <div class="nav-links">
+      <a href="shindan.html">AIバイク診断</a>
+      <a href="hoken.html">保険比較</a>
+      <a href="youhin.html">おすすめ用品</a>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <h1>🛡️ バイク保険比較</h1>
+    <p>主要バイク保険を徹底比較。あなたに合った保険が見つかります。</p>
+  </div>
+
+  <div class="container">
+
+    <!-- おすすめ保険カード -->
+    <h2 class="section-title">おすすめバイク保険TOP4</h2>
+    <p class="section-sub">※保険料は目安です。詳細は各社公式サイトでご確認ください。</p>
+
+    <div class="insurance-grid">
+
+      <div class="insurance-card recommended">
+        <div class="rec-badge">🏆 編集部イチオシ</div>
+        <div class="insurance-name">チューリッヒ バイク保険</div>
+        <div class="insurance-price">月額 約2,000円〜 <span>（125cc以下の場合）</span></div>
+        <ul class="insurance-features">
+          <li>ネット申込みで最大40%割引</li>
+          <li>ロードサービス無料付帯</li>
+          <li>弁護士費用特約が充実</li>
+          <li>示談交渉サービスあり</li>
+        </ul>
+        <a href="#" class="affiliate-btn">公式サイトで見積もり →</a>
+      </div>
+
+      <div class="insurance-card">
+        <div class="insurance-name">三井ダイレクト損保</div>
+        <div class="insurance-price">月額 約1,800円〜 <span>（125cc以下の場合）</span></div>
+        <ul class="insurance-features">
+          <li>業界最安水準の保険料</li>
+          <li>24時間事故受付対応</li>
+          <li>オンライン手続き完結</li>
+          <li>等級引継ぎ可能</li>
+        </ul>
+        <a href="#" class="affiliate-btn outline">公式サイトで見積もり →</a>
+      </div>
+
+      <div class="insurance-card">
+        <div class="insurance-name">アクサダイレクト</div>
+        <div class="insurance-price">月額 約2,200円〜 <span>（125cc以下の場合）</span></div>
+        <ul class="insurance-features">
+          <li>外資系の安定した保証</li>
+          <li>入院・通院補償が手厚い</li>
+          <li>海外旅行中の補償あり</li>
+          <li>ペット同乗時の補償あり</li>
+        </ul>
+        <a href="#" class="affiliate-btn outline">公式サイトで見積もり →</a>
+      </div>
+
+      <div class="insurance-card">
+        <div class="insurance-name">SBI損保 バイク保険</div>
+        <div class="insurance-price">月額 約1,900円〜 <span>（125cc以下の場合）</span></div>
+        <ul class="insurance-features">
+          <li>ネット完結でペーパーレス</li>
+          <li>ゴールド免許割引あり</li>
+          <li>複数台割引あり</li>
+          <li>サポートセンターが丁寧</li>
+        </ul>
+        <a href="#" class="affiliate-btn outline">公式サイトで見積もり →</a>
+      </div>
+
+    </div>
+
+    <!-- 比較表 -->
+    <h2 class="section-title">主要保険 一覧比較</h2>
+    <p class="section-sub">主な補償内容で各社を比較</p>
+
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>保険会社</th>
+          <th>ロードサービス</th>
+          <th>弁護士特約</th>
+          <th>示談交渉</th>
+          <th>ネット割引</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>チューリッヒ <span class="badge">おすすめ</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">最大40%</span></td>
+        </tr>
+        <tr>
+          <td>三井ダイレクト</td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">最大30%</span></td>
+        </tr>
+        <tr>
+          <td>アクサダイレクト</td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">最大25%</span></td>
+        </tr>
+        <tr>
+          <td>SBI損保</td>
+          <td><span class="check">✓</span></td>
+          <td><span class="cross">△</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">最大20%</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 解説コンテンツ -->
+    <div class="info-card">
+      <h3>🔰 バイク保険の選び方</h3>
+      <p>バイク保険を選ぶ際は「対人賠償」「対物賠償」「人身傷害」の3つが揃っているかを確認しましょう。特に対人賠償は無制限にしておくことを強くおすすめします。</p>
+      <p>また、ネット申込みの保険は代理店型に比べて20〜40%安くなるケースが多く、補償内容も遜色ありません。初めての方はまず複数社で無料見積もりを取って比較するのが近道です。</p>
+    </div>
+
+    <div class="info-card">
+      <h3>💡 保険料を安くするコツ</h3>
+      <p>①ゴールド免許割引を活用する ②複数台所有なら同一会社でまとめる ③ネット申込みを選ぶ ④走行距離が少ない場合は走行距離割引が使える会社を選ぶ、の4点が基本です。</p>
+      <p>保険会社によって得意な年齢層・車種が異なるため、必ず複数社で見積もりを取りましょう。</p>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>
+      <a href="index.html">ホーム</a>
+      <a href="shindan.html">AIバイク診断</a>
+      <a href="hoken.html">保険比較</a>
+      <a href="youhin.html">おすすめ用品</a>
+    </p>
+    <p style="margin-top:12px;">© 2026 Bike-Navi. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
